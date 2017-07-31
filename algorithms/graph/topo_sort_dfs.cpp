@@ -1,9 +1,15 @@
-/* Topological Sort for directed acyclic graph */
+/* Topological Sort with depth-first search for directed acyclic graph */
 
 #include <vector>
 
 using namespace std;
 
+/**
+ * edges: edges[u][j] = v means u is adjacent or neighbor with v
+ * visited: visited[u] = true means u has been visited
+ * u: index of current node (1 <= u <= N)
+ * topo_array: resulting array of topologically sorted elements
+ */
 void topo_sort(const vector<vector<int>> &edges, vector<bool> &visited, int u,
                vector<int> topo_array) {
     visited[u] = true;
