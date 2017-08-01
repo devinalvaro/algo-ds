@@ -1,5 +1,6 @@
 /* Topological Sort with breadth-first search for directed acyclic graph */
 
+#include <map>
 #include <queue>
 #include <vector>
 
@@ -11,8 +12,8 @@ using namespace std;
  * in_degrees: in_degrees[u] means number of nodes adjacent with u
  * topo_array: resulting array of topologically sorted elements
  */
-void topo_sort_bfs(int n, const vector<vector<int>> &edges,
-                   vector<int> &in_degrees, vector<int> &topo_array) {
+void topo_sort_bfs(int n, map<int, vector<int>> &edges, vector<int> &in_degrees,
+                   vector<int> &topo_array) {
     // priority queue with minimum element on top
     priority_queue<int, vector<int>, greater<int>> pq;
     for (int i = 1; i <= n; i++) {

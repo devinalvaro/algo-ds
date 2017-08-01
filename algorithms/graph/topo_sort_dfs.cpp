@@ -1,5 +1,6 @@
 /* Topological Sort with depth-first search for directed acyclic graph */
 
+#include <map>
 #include <vector>
 
 using namespace std;
@@ -10,7 +11,7 @@ using namespace std;
  * u: index of current node (1 <= u <= N)
  * topo_array: resulting array of topologically sorted elements
  */
-void topo_sort(const vector<vector<int>> &edges, vector<bool> &visited, int u,
+void topo_sort(map<int, vector<int>> &edges, vector<bool> &visited, int u,
                vector<int> topo_array) {
     visited[u] = true;
 
