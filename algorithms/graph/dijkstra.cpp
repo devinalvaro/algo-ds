@@ -10,7 +10,8 @@ using namespace std;
 /**
  * n: number of nodes in graph [1...n]
  * s: starting node
- * edges: edges[u][j] = v means u is adjacent or neighbor with v
+ * edges: edges[u][j] = <d, v>, where v is a neighbor of u
+ *                                    d is the weight of edge connecting u and v
  * dist: resulting vector where distance[e] is distance of e from s
  */
 void dijkstra(int n, int s, map<int, vector<pair<int, int>>> &edges,
