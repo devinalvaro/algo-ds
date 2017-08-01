@@ -8,7 +8,7 @@
 using namespace std;
 
 /**
- * n: number of nodes in graph
+ * n: number of nodes in graph [1...n]
  * s: starting node
  * edges: edges[u][j] = v means u is adjacent or neighbor with v
  * dist: resulting vector where distance[e] is distance of e from s

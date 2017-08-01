@@ -6,7 +6,7 @@
 using namespace std;
 
 /**
- * n: number of elements to topologically sorted
+ * n: number of elements to topologically sorted [1...n]
  * edges: edges[u][j] = v means u is adjacent or neighbor with v
  * in_degrees: in_degrees[u] means number of nodes adjacent with u
  * topo_array: resulting array of topologically sorted elements
