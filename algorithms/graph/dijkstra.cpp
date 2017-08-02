@@ -15,7 +15,8 @@ using namespace std;
  * dist: resulting vector where distance[e] is distance of e from s
  */
 void dijkstra(int n, int s, map<int, vector<pair<int, int>>> &edges,
-              vector<int> &dist) {
+              vector<int> &dist)
+{
     dist.assign(n + 1, INT_MAX);
     dist[s] = 0; // start at node s
 

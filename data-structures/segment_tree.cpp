@@ -4,7 +4,8 @@
 
 using namespace std;
 
-class SegmentTree {
+class SegmentTree
+{
 private:
     int n;
     vector<int> arr;
@@ -15,7 +16,8 @@ private:
 
     int right_child(int parent) { return (parent << 1) + 2; }
 
-    void build(int parent, int left, int right) {
+    void build(int parent, int left, int right)
+    {
         if (left > right)
             return;
 
@@ -33,7 +35,8 @@ private:
                                segment_tree[right_child(parent)];
     }
 
-    int query(int parent, int left, int right, int i, int j) {
+    int query(int parent, int left, int right, int i, int j)
+    {
         if (lazy[parent] != 0) {
             segment_tree[parent] += (right - left + 1) * lazy[parent];
 
@@ -57,7 +60,8 @@ private:
                query(right_child(parent), mid + 1, right, i, j);
     }
 
-    void update_range(int parent, int left, int right, int i, int j, int diff) {
+    void update_range(int parent, int left, int right, int i, int j, int diff)
+    {
         if (lazy[parent] != 0) {
             segment_tree[parent] += (right - left + 1) * lazy[parent];
 
@@ -92,7 +96,8 @@ private:
     }
 
 public:
-    SegmentTree(int _n, vector<int> &_arr) {
+    SegmentTree(int _n, vector<int> &_arr)
+    {
         n = _n;
         arr = _arr;
 
@@ -104,7 +109,8 @@ public:
 
     int query(int i, int j) { return query(0, 0, n - 1, i, j); }
 
-    void update_range(int i, int j, int diff) {
+    void update_range(int i, int j, int diff)
+    {
         update_range(0, 0, n - 1, i, j, diff);
     }
 };

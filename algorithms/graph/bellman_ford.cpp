@@ -13,7 +13,8 @@ using namespace std;
  * dist: resulting vector where distance[e] is distance of e from s
  */
 void bellman_ford(int n, int s, map<int, vector<pair<int, int>>> &edges,
-                  vector<int> &dist) {
+                  vector<int> &dist)
+{
     dist[s] = 0;
     for (int i = 0; i < n - 1; i++) {
         for (int u = 1; u <= n; u++) {
@@ -33,7 +34,8 @@ void bellman_ford(int n, int s, map<int, vector<pair<int, int>>> &edges,
  * dist: resulting vector where distance[e] is distance of e from s
  */
 bool has_negative_cycle(int n, map<int, vector<pair<int, int>>> &edges,
-                        const vector<int> &dist) {
+                        const vector<int> &dist)
+{
     for (int u = 1; u <= n; u++) {
         for (size_t j = 0; j < edges[u].size(); j++) {
             int v = edges[u][j].second;

@@ -5,7 +5,8 @@
 
 using namespace std;
 
-class Node {
+class Node
+{
 private:
     int data;
 
@@ -13,7 +14,8 @@ public:
     Node *prev_node;
     Node *next_node;
 
-    Node(int _data, Node *_prev_node, Node *_next_node) {
+    Node(int _data, Node *_prev_node, Node *_next_node)
+    {
         data = _data;
         prev_node = _prev_node;
         next_node = _next_node;
@@ -24,23 +26,27 @@ public:
     int getData() { return data; }
 };
 
-class LinkedList {
+class LinkedList
+{
 private:
     Node *head;
     Node *tail;
 
 public:
-    LinkedList() {
+    LinkedList()
+    {
         head = nullptr;
         tail = nullptr;
     }
 
-    ~LinkedList() {
+    ~LinkedList()
+    {
         delete head;
         delete tail;
     }
 
-    void push_front(int data) {
+    void push_front(int data)
+    {
         if (head == nullptr) {
             head = tail = new Node(data, nullptr, nullptr);
 
@@ -52,7 +58,8 @@ public:
         head = head->prev_node;
     }
 
-    void pop_front() {
+    void pop_front()
+    {
         if (head == nullptr)
             return;
 
@@ -67,7 +74,8 @@ public:
         head->prev_node = nullptr;
     }
 
-    void push_back(int data) {
+    void push_back(int data)
+    {
         if (tail == nullptr) {
             head = tail = new Node(data, nullptr, nullptr);
 
@@ -79,7 +87,8 @@ public:
         tail = tail->next_node;
     }
 
-    void pop_back() {
+    void pop_back()
+    {
         if (tail == nullptr)
             return;
 

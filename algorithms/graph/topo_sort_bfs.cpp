@@ -13,7 +13,8 @@ using namespace std;
  * topo_array: resulting array of topologically sorted elements
  */
 void topo_sort_bfs(int n, map<int, vector<int>> &edges, vector<int> &in_degrees,
-                   vector<int> &topo_array) {
+                   vector<int> &topo_array)
+{
     // priority queue with minimum element on top
     priority_queue<int, vector<int>, greater<int>> pq;
     for (int i = 1; i <= n; i++) {
