@@ -40,3 +40,24 @@ bool is_prime(vector<bool> &is_prime, vector<int> &primes, int number) {
 
     return true;
 }
+
+/**
+ * primes: array of prime numbers
+ * number: the number to be factored by prime numbers
+ * prime_factors: resulting array of the number's prime factors
+ */
+void prime_factors(vector<int> &primes, int number, vector<int> &prime_factors) {
+    prime_factors.clear();
+
+    for (int i = 0; i < primes.size() && primes[i] * primes[i] <= number; i++) {
+        while (number % primes[i] == 0) {
+            number /= primes[i];
+
+            prime_factors.push_back(primes[i]);
+        }
+    }
+
+    if (number != 1) {
+        prime_factors.push_back(number);
+    }
+}
