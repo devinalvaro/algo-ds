@@ -9,7 +9,7 @@ using namespace std;
  * n: intended size of sieve [1...n]
  * is_prime: is_prime[i] means number i is prime
  */
-void sieve_of_eratosthenes(int n, bitset<10000010> &is_prime)
+void sieve_of_eratosthenes(int n, bitset<1000000> &is_prime)
 {
     is_prime.set();
     is_prime[0] = is_prime[1] = 0;
@@ -24,14 +24,15 @@ void sieve_of_eratosthenes(int n, bitset<10000010> &is_prime)
 }
 
 /**
+ * n: size of sieve [1...n]
  * is_prime: is_prime[i] means number i is prime
  * primes: resulting array of prime numbers from [1...n]
  */
-void find_primes(bitset<10000010> &is_prime, vector<int> &primes)
+void find_primes(int n, bitset<1000000> &is_prime, vector<int> &primes)
 {
     primes.clear();
 
-    for (size_t i = 0; i < is_prime.size(); i++) {
+    for (int i = 0; i <= n; i++) {
         if (is_prime[i]) {
             primes.push_back(i);
         }
@@ -44,7 +45,7 @@ void find_primes(bitset<10000010> &is_prime, vector<int> &primes)
  * primes: resulting array of prime numbers from [1...n]
  * number: the number to be primality tested
  */
-bool is_prime(int n, bitset<10000010> &is_prime, vector<int> &primes, int number)
+bool is_prime(int n, bitset<1000000> &is_prime, vector<int> &primes, int number)
 {
     if (number <= n)
         return is_prime[number];
