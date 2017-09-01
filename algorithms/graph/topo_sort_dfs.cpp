@@ -12,7 +12,7 @@ using namespace std;
  * topo_array: resulting array of topologically sorted elements
  */
 void topo_sort(map<int, vector<int>> &edges, vector<bool> &visited, int u,
-               vector<int> topo_array)
+               vector<int> &topo_array)
 {
     visited[u] = true;
 
