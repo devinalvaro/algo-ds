@@ -11,7 +11,7 @@
  *                                  edges[i].second.second is the second node
  *                                  edges[i].first is distance between the two
  */
-int kruskal(int n, vector<pair<int, pair<int, int>>> edges_list)
+int kruskal(int n, vector<pair<int, pair<int, int>>> &edges_list)
 {
     sort(edges_list.begin(), edges_list.end());
 
