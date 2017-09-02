@@ -79,24 +79,27 @@ public:
         }
     }
 
-    void extract_min()
+    int extract_root_element()
     {
         if (heap_size <= 0)
-            return;
+            return INT_MAX;
 
+        int root = heap[0];
         heap[0] = heap[heap_size - 1];
 
         heap_size--;
 
         min_heapify(0);
+
+        return root;
     }
 
     void delete_key(int node)
     {
         change_value(node, INT_MIN);
 
-        extract_min();
+        extract_root_element();
     }
 
-    int get_min_element() { return heap[0]; }
+    int get_root_element() { return heap[0]; }
 };
