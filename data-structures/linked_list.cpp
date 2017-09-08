@@ -5,23 +5,23 @@
 
 using namespace std;
 
-class LinkedListNode
+class Node
 {
 private:
     int data;
 
 public:
-    LinkedListNode *prev_node;
-    LinkedListNode *next_node;
+    Node *prev_node;
+    Node *next_node;
 
-    LinkedListNode(int _data, LinkedListNode *_prev_node, LinkedListNode *_next_node)
+    Node(int _data, Node *_prev_node, Node *_next_node)
     {
         data = _data;
         prev_node = _prev_node;
         next_node = _next_node;
     }
 
-    ~LinkedListNode() { delete next_node; }
+    ~Node() { delete next_node; }
 
     int getData() { return data; }
 };
@@ -29,8 +29,8 @@ public:
 class LinkedList
 {
 private:
-    LinkedListNode *head;
-    LinkedListNode *tail;
+    Node *head;
+    Node *tail;
 
 public:
     LinkedList()
@@ -48,12 +48,12 @@ public:
     void push_front(int data)
     {
         if (head == nullptr) {
-            head = tail = new LinkedListNode(data, nullptr, nullptr);
+            head = tail = new Node(data, nullptr, nullptr);
 
             return;
         }
 
-        head->prev_node = new LinkedListNode(data, nullptr, head);
+        head->prev_node = new Node(data, nullptr, head);
         head->prev_node->next_node = head;
         head = head->prev_node;
     }
@@ -77,12 +77,12 @@ public:
     void push_back(int data)
     {
         if (tail == nullptr) {
-            head = tail = new LinkedListNode(data, nullptr, nullptr);
+            head = tail = new Node(data, nullptr, nullptr);
 
             return;
         }
 
-        tail->next_node = new LinkedListNode(data, tail, nullptr);
+        tail->next_node = new Node(data, tail, nullptr);
         tail->next_node->prev_node = tail;
         tail = tail->next_node;
     }
