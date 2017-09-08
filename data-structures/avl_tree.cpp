@@ -37,6 +37,13 @@ private:
         return node->height;
     }
 
+    Node *getMinNode(Node *node)
+    {
+        if (!node->left)
+            return node;
+        return getMinNode(node->left);
+    }
+
     Node *rightRotate(Node *node)
     {
         Node *leftChild = node->left;
@@ -102,10 +109,41 @@ private:
         return node;
     }
 
+    Node *remove(Node *node, int data)
+    {
+        if (data < node->data) {
+            node->left = remove(node->left, data);
+        } else if (data > node->data) {
+            node->right = remove(node->right, data);
+        } else { // node is to be deleted
+            if (node->left && node->right) {
+                Node *minNode = getMinNode(node->right);
+                node->data = minNode->data;
+
+                remove(node->right, minNode->data);
+            } else if (node->left) {
+                node = node->left;
+            } else if (node->right) {
+                node = node->right;
+            } else {
+                delete node;
+                node = nullptr;
+            }
+        }
+
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+
+        node = balance(node, data);
+
+        return node;
+    }
+
 public:
     AvlTree(int data) { root = new Node(data); }
 
     ~AvlTree() { delete root; }
 
     void insert(int data) { insert(root, data); }
+
+    void remove(int data) { remove(root, data); }
 };
