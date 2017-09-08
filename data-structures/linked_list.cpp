@@ -7,12 +7,10 @@ using namespace std;
 
 class Node
 {
-private:
-    int data;
-
 public:
     Node *prev_node;
     Node *next_node;
+    int data;
 
     Node(int _data, Node *_prev_node, Node *_next_node)
     {
@@ -21,9 +19,11 @@ public:
         next_node = _next_node;
     }
 
-    ~Node() { delete next_node; }
-
-    int getData() { return data; }
+    ~Node()
+    {
+        delete prev_node;
+        delete next_node;
+    }
 };
 
 class LinkedList
@@ -103,7 +103,7 @@ public:
         tail->next_node = nullptr;
     }
 
-    int get_head_data() { return head->getData(); }
+    int get_head_data() { return head->data; }
 
-    int get_tail_data() { return tail->getData(); }
+    int get_tail_data() { return tail->data; }
 };
