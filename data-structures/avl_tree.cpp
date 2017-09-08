@@ -11,11 +11,25 @@ public:
     Node *right;
     int data;
     int height;
+
+    Node(int _data)
+    {
+        data = _data;
+        height = 0;
+    }
+
+    ~Node()
+    {
+        delete left;
+        delete right;
+    }
 };
 
-class AVLTree
+class AvlTree
 {
-public:
+private:
+    Node *root;
+
     int getHeight(Node *node)
     {
         if (!node)
@@ -51,31 +65,8 @@ public:
         return rightChild;
     }
 
-    int value(Node *node)
+    Node *balance(Node *node, int data)
     {
-        if (!node)
-            return -1;
-        return node->data;
-    }
-
-    Node *insert(Node *node, int data)
-    {
-        if (!node) {
-            node = new Node;
-            node->data = data;
-            node->height = 0;
-
-            return node;
-        }
-
-        if (data < node->data) {
-            node->left = insert(node->left, data);
-        } else {
-            node->right = insert(node->right, data);
-        }
-
-        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
-
         int balance = getHeight(node->left) - getHeight(node->right);
 
         if (balance > 1 && data < node->left->data) {
@@ -92,4 +83,29 @@ public:
 
         return node;
     }
+
+    Node *insert(Node *node, int data)
+    {
+        if (!node)
+            return new Node(data);
+
+        if (data < node->data) {
+            node->left = insert(node->left, data);
+        } else {
+            node->right = insert(node->right, data);
+        }
+
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+
+        node = balance(node, data);
+
+        return node;
+    }
+
+public:
+    AvlTree(int data) { root = new Node(data); }
+
+    ~AvlTree() { delete root; }
+
+    void insert(int data) { insert(root, data); }
 };
