@@ -1,110 +1,106 @@
-#include <vector>
+#include <unordered_map>
 
 using namespace std;
 
-class Node
-{
-public:
-    Node *prevNode = nullptr;
+struct Node {
     Node *nextNode = nullptr;
+    Node *prevNode = nullptr;
     int pageNumber;
 
     Node(int _pageNumber) { pageNumber = _pageNumber; }
 };
 
-class Queue
-{
-public:
-    Node *frontNode = nullptr;
-    Node *rearNode = nullptr;
-    int numberOfFrames;
-    int numberOfFilledFrames = 0;
-
-    Queue(int _numberOfFrames) { numberOfFrames = _numberOfFrames; }
-
-    bool isEmpty() { return rearNode == nullptr; }
-
-    bool isFull() { return numberOfFilledFrames == numberOfFrames; }
-
-    void dequeue()
-    {
-        if (isEmpty())
-            return;
-
-        if (frontNode == rearNode) {
-            frontNode = nullptr;
-        }
-
-        Node *temp = rearNode;
-        rearNode = rearNode->prevNode;
-        if (rearNode != nullptr) {
-            rearNode->nextNode = nullptr;
-        }
-        delete temp;
-
-        numberOfFilledFrames--;
-    }
-};
-
 class LruCache
 {
-public:
-    Queue frameQueue;
-    vector<Node *> pageArray;
-    int numberOfPages;
+private:
+    // hash map
+    unordered_map<int, Node *> hashMap;
 
-    LruCache(int numberOfFrames, int _numberOfPages)
-        : frameQueue(numberOfFrames)
+    // deque
+    Node *head = nullptr;
+    Node *tail = nullptr;
+    int cacheAmount = 0;
+    int cacheCapacity;
+
+    bool isCacheFull() { return cacheAmount == cacheCapacity; }
+
+    bool isCacheEmpty() { return cacheAmount == 0; }
+
+    void enqueue(int pageNumber)
     {
-        numberOfPages = _numberOfPages;
-
-        pageArray = vector<Node *>(numberOfPages);
-    }
-
-    void insertPage(int pageNumber)
-    {
-        if (frameQueue.isFull()) {
-            pageArray[frameQueue.rearNode->pageNumber] = nullptr;
-            frameQueue.dequeue();
+        if (isCacheFull()) {
+            dequeue();
         }
 
         Node *temp = new Node(pageNumber);
-        temp->nextNode = frameQueue.frontNode;
+        temp->nextNode = head;
 
-        if (frameQueue.isEmpty()) {
-            frameQueue.rearNode = temp;
+        if (isCacheEmpty()) {
+            tail = temp;
         } else {
-            frameQueue.frontNode->prevNode = temp;
+            head->prevNode = temp;
         }
-        frameQueue.frontNode = temp;
+        head = temp;
 
-        pageArray[pageNumber] = temp;
-
-        frameQueue.numberOfFilledFrames++;
+        cacheAmount++;
     }
 
-    void getPage(int pageNumber)
+    void dequeue()
     {
-        Node *requestedPage = pageArray[pageNumber];
+        if (isCacheEmpty())
+            return;
 
-        if (requestedPage == nullptr) {
+        if (head == tail) {
+            head = nullptr;
+        }
+
+        Node *temp = tail;
+        tail = tail->prevNode;
+        if (tail) {
+            tail->nextNode = nullptr;
+        }
+        delete temp;
+
+        cacheAmount--;
+    }
+
+public:
+    LruCache(int _cacheCapacity) { cacheCapacity = _cacheCapacity; }
+
+    void insertPage(int pageNumber)
+    {
+        if (isCacheFull()) {
+            hashMap[tail->pageNumber] = nullptr;
+        }
+
+        enqueue(pageNumber);
+
+        hashMap[pageNumber] = head;
+    }
+
+    void referPage(int pageNumber)
+    {
+        Node *page = hashMap[pageNumber];
+
+        if (!page) {
             insertPage(pageNumber);
-        } else if (requestedPage != frameQueue.frontNode) {
-            requestedPage->prevNode->nextNode = requestedPage->nextNode;
+        } else if (page != head) {
+            page->prevNode->nextNode = page->nextNode;
 
-            if (requestedPage->nextNode != nullptr) {
-                requestedPage->nextNode->prevNode = requestedPage->prevNode;
+            if (page->nextNode) {
+                page->nextNode->prevNode = page->prevNode;
             }
 
-            if (requestedPage == frameQueue.rearNode) {
-                frameQueue.rearNode = frameQueue.rearNode->prevNode;
-                frameQueue.rearNode->nextNode = nullptr;
+            if (page == tail) {
+                tail = tail->prevNode;
+                tail->nextNode = nullptr;
             }
 
-            requestedPage->nextNode = frameQueue.frontNode;
+            page->nextNode = head;
+            page->prevNode = nullptr;
 
-            frameQueue.frontNode->prevNode = requestedPage;
-            frameQueue.frontNode = requestedPage;
+            head->prevNode = page;
+            head = page;
         }
     }
 };
