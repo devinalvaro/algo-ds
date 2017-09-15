@@ -3,35 +3,26 @@
 
 using namespace std;
 
+template <class T>
 class LruCache
 {
 private:
-    int cacheCapacity;
-    unordered_map<int, list<pair<int, int>>::iterator> pageMap;
-    list<pair<int, int>> pageList;
+    const int cacheCapacity;
+    unordered_map<int, typename list<pair<int, T>>::iterator> pageMap;
+    list<pair<int, T>> pageList;
 
 public:
-    LruCache(int cacheCapacity) { this->cacheCapacity = cacheCapacity; }
+    LruCache(int _cacheCapacity) : cacheCapacity(_cacheCapacity) {}
 
-    int get(int key)
-    {
-        auto page = pageMap.find(key);
+    T get(int key);
 
-        if (page == pageMap.end())
-            return -1;
-
-        pageList.splice(pageList.begin(), pageList, page->second);
-
-        return page->second->second;
-    }
-
-    void put(int key, int value)
+    void put(int key, T value)
     {
         auto page = pageMap.find(key);
 
         if (page != pageMap.end()) {
-            page->second->second = value;
             pageList.splice(pageList.begin(), pageList, page->second);
+            pageList.begin()->second = value;
 
             return;
         }
@@ -45,3 +36,16 @@ public:
         pageMap[key] = pageList.begin();
     }
 };
+
+template <class T>
+T LruCache<T>::get(int key)
+{
+    auto page = pageMap.find(key);
+
+    if (page == pageMap.end())
+        return -1;
+
+    pageList.splice(pageList.begin(), pageList, page->second);
+
+    return pageList.begin()->second;
+}
