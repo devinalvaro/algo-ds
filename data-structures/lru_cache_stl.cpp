@@ -3,21 +3,21 @@
 
 using namespace std;
 
-class LRUCache
+class LruCache
 {
 private:
-    int capacity;
+    int cacheCapacity;
     unordered_map<int, list<pair<int, int>>::iterator> pageMap;
     list<pair<int, int>> pageList;
 
 public:
-    LRUCache(int capacity) { this->capacity = capacity; }
+    LruCache(int cacheCapacity) { this->cacheCapacity = cacheCapacity; }
 
     int get(int key)
     {
         auto page = pageMap.find(key);
 
-        if (page == pageMap.end()) // key doesn't exist
+        if (page == pageMap.end())
             return -1;
 
         pageList.splice(pageList.begin(), pageList, page->second);
@@ -29,14 +29,14 @@ public:
     {
         auto page = pageMap.find(key);
 
-        if (page != pageMap.end()) { // key already exists
+        if (page != pageMap.end()) {
             page->second->second = value;
             pageList.splice(pageList.begin(), pageList, page->second);
 
             return;
         }
 
-        if ((int)pageMap.size() == capacity) {
+        if ((int)pageMap.size() == cacheCapacity) {
             pageMap.erase(pageList.back().first);
             pageList.pop_back();
         }
