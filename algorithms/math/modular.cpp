@@ -12,16 +12,13 @@ int sub(long long a, long long b) {
     return mod(a - b);
 }
 
-int mult(long long a, long long b) {
-    if (b == 0) return 0;
-    int m = mult(a, b / 2);
-    int mm = add(m, m);
-    return add(mm, (b & 1 ? a : 0));
+int mul(long long a, long long b) {
+    return mod(a * b);
 }
 
 int power(long long a, long long b) {
     if (b == 0) return 1;
     int p = power(a, b / 2);
-    int pp = mult(p, p);
-    return mult(pp, (b & 1 ? a : 1));
+    int pp = mul(p, p);
+    return mul(pp, (b & 1 ? a : 1));
 }
