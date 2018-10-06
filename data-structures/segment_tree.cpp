@@ -4,113 +4,99 @@
 
 using namespace std;
 
-class SegmentTree
-{
+class SegmentTree {
 private:
-    int n;
-    vector<int> arr;
-    vector<int> segment_tree;
-    vector<int> lazy;
+    vector<int> arr, lazy, st;
 
-    int left_child(int parent) { return (parent << 1) + 1; }
-
-    int right_child(int parent) { return (parent << 1) + 2; }
-
-    void build(int parent, int left, int right)
-    {
-        if (left > right)
-            return;
-
-        if (left == right) {
-            segment_tree[parent] = arr[left];
-
-            return;
-        }
-
-        int mid = (left + right) / 2;
-        build(left_child(parent), left, mid);
-        build(right_child(parent), mid + 1, right);
-
-        segment_tree[parent] = segment_tree[left_child(parent)] +
-                               segment_tree[right_child(parent)];
+    int left(int id) {
+        return (id << 1) + 1;
     }
 
-    int query(int parent, int left, int right, int i, int j)
-    {
-        if (lazy[parent] != 0) {
-            segment_tree[parent] += (right - left + 1) * lazy[parent];
+    int right(int id) {
+        return (id << 1) + 2;
+    }
 
-            if (left != right) {
-                lazy[left_child(parent)] += lazy[parent];
-                lazy[right_child(parent)] += lazy[parent];
-            }
-
-            lazy[parent] = 0;
+    void build(int id, int l, int r) {
+        if (l > r) {
+            return;
+        }
+        if (l == r) {
+            st[id] = arr[l];
+            return;
         }
 
-        if (left > right || left > j || right < i)
+        int m = (l + r) / 2;
+        build(left(id), l, m);
+        build(right(id), m + 1, r);
+        st[id] = st[left(id)] + st[right(id)];
+    }
+
+    int query(int id, int l, int r, int lq, int rq) {
+        lazy_update(id, l, r);
+
+        if (l > r || r < lq || rq < l) {
             return 0;
-
-        if (left >= i && right <= j) {
-            return segment_tree[parent];
+        }
+        if (lq <= l && r <= rq) {
+            return st[id];
         }
 
-        int mid = (left + right) / 2;
-        return query(left_child(parent), left, mid, i, j) +
-               query(right_child(parent), mid + 1, right, i, j);
+        int m = (l + r) / 2;
+        return query(left(id), l, m, lq, rq) +
+               query(right(id), m + 1, r, lq, rq);
     }
 
-    void update_range(int parent, int left, int right, int i, int j, int diff)
-    {
-        if (lazy[parent] != 0) {
-            segment_tree[parent] += (right - left + 1) * lazy[parent];
+    void update(int id, int l, int r, int lq, int rq, int diff) {
+        lazy_update(id, l, r);
 
-            if (left != right) {
-                lazy[left_child(parent)] += lazy[parent];
-                lazy[right_child(parent)] += lazy[parent];
-            }
-
-            lazy[parent] = 0;
-        }
-
-        if (left > right || left > j || right < i)
+        if (l > r || r < lq || rq < l) {
             return;
+        }
+        if (lq <= l && r <= rq) {
+            st[id] += (r - l + 1) * diff;
 
-        if (left >= i && right <= j) {
-            segment_tree[parent] += (right - left + 1) * diff;
-
-            if (left != right) {
-                lazy[left_child(parent)] += diff;
-                lazy[right_child(parent)] += diff;
+            if (l != r) {
+                lazy[left(id)] += diff;
+                lazy[right(id)] += diff;
             }
-
             return;
         }
 
-        int mid = (left + right) / 2;
-        update_range(left_child(parent), left, mid, i, j, diff);
-        update_range(right_child(parent), mid + 1, right, i, j, diff);
+        int m = (l + r) / 2;
+        update(left(id), l, m, lq, rq, diff);
+        update(right(id), m + 1, r, lq, rq, diff);
+        st[id] = st[left(id)] + st[right(id)];
+    }
 
-        segment_tree[parent] = segment_tree[left_child(parent)] +
-                               segment_tree[right_child(parent)];
+    void lazy_update(int id, int l, int r) {
+        if (lazy[id] == 0) {
+            return;
+        }
+
+        st[id] += (r - l + 1) * lazy[id];
+
+        if (l != r) {
+            lazy[left(id)] += lazy[id];
+            lazy[right(id)] += lazy[id];
+        }
+        lazy[id] = 0;
     }
 
 public:
-    SegmentTree(int _n, vector<int> &_arr)
-    {
-        n = _n;
+    SegmentTree(vector<int> &_arr) {
         arr = _arr;
 
-        segment_tree.assign(4 * n, 0);
-        build(0, 0, n - 1);
+        st.assign(4 * arr.size(), 0);
+        build(0, 0, arr.size() - 1);
 
-        lazy.assign(4 * n, 0);
+        lazy.assign(4 * arr.size(), 0);
     }
 
-    int query(int i, int j) { return query(0, 0, n - 1, i, j); }
+    int query(int lq, int rq) {
+        return query(0, 0, arr.size() - 1, lq, rq);
+    }
 
-    void update_range(int i, int j, int diff)
-    {
-        update_range(0, 0, n - 1, i, j, diff);
+    void update(int lq, int rq, int diff) {
+        update(0, 0, arr.size() - 1, lq, rq, diff);
     }
 };
